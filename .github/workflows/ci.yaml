@@ -59,7 +59,7 @@ jobs:
         run: |
           set -euo pipefail
           REPO_OWNER=$(echo "$GITHUB_REPOSITORY" | cut -d'/' -f1)
-          IMAGE_BASE="ghcr.io/${REPO_OWNER}/it-works-on-my-machine"
+          IMAGE_BASE="ghcr.io/${REPO_OWNER,,}/it-works-on-my-machine"
 
           VERSION=$(node -p "require('./package.json').version")
 
