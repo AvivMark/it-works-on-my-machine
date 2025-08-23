@@ -1,0 +1,14 @@
+name: Internal Registry Leak Guard
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths:
+      - '**/package-lock.json'
+      - '**/yarn.lock'
+      - '**/pnpm-lock.yaml'
+      - '**/.npmrc'
+      - '**/.yarnrc*'
+      - '**/.pnpmfile.cjs'
+permissions:
+  contents: read
+  pull-requests: read
