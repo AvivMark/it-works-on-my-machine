@@ -1,0 +1,124 @@
+name: CI
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+  release:
+    types: [published]
+  push:
+    branches:
+      - '*'
+permissions:
+  contents: read
+  packages: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v4
+
+      - name: use nodejs environment
+        uses: actions/setup-node@v4
+        with: 
+          node-version: '20'
+          cache: 'npm' 
+
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: smoke tests
+        run: |
+          npm start &
+          SERVER_PID=$!
+          sleep 5
+          ./smoke-test.sh
+          kill $SERVER_PID
+    
+  docker-build-publish:
+    name: Build and publish Docker image
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU and buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Determine image tags
+        id: tagger
+        run: |
+          set -euo pipefail
+          REPO_OWNER=$(echo "$GITHUB_REPOSITORY" | cut -d'/' -f1)
+          IMAGE_BASE="ghcr.io/${REPO_OWNER}/it-works-on-my-machine"
+
+          VERSION=$(node -p "require('./package.json').version")
+
+          echo "tags<<EOF" >> $GITHUB_OUTPUT
+          if [ -n "${VERSION}" ]; then
+            echo "${IMAGE_BASE}:${VERSION}" >> $GITHUB_OUTPUT
+          else
+            # use to commit sha if version missing
+            echo "${IMAGE_BASE}:${GITHUB_SHA}" >> $GITHUB_OUTPUT
+          fi
+          # Always also publish the SHA and latest tags for traceability
+          echo "${IMAGE_BASE}:${GITHUB_SHA}" >> $GITHUB_OUTPUT
+          echo "${IMAGE_BASE}:latest" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Build and push image to GHCR
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          tags: ${{ steps.tagger.outputs.tags }}
+          file: ./Dockerfile
+
+
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with: 
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm run test
+        continue-on-error: false
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Run Super-Linter
+        uses: github/super-linter@v6
+        env:
+          DEFAULT_BRANCH: main
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VALIDATE_ALL_CODEBASE: false
+          VALIDATE_JAVASCRIPT_ES: true
+          IGNORE_GITIGNORED_FILES: true
+
+    

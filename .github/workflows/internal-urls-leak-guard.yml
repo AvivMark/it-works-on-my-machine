@@ -2,13 +2,17 @@ name: Internal Registry Leak Guard
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
-    paths:
-      - '**/package-lock.json'
-      - '**/yarn.lock'
-      - '**/pnpm-lock.yaml'
-      - '**/.npmrc'
-      - '**/.yarnrc*'
-      - '**/.pnpmfile.cjs'
 permissions:
   contents: read
   pull-requests: read
+jobs:
+  scan-internal-data:
+    name: Scan for internal/unwanted data
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run internal data scan
+        run: bash .github/scripts/check-internal-data.sh
+
