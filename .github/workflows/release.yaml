@@ -1,8 +1,7 @@
 name: Release
 on:
   push:
-    branches: [ main ]  # Added develop for testing
-  workflow_dispatch:             # Added manual trigger for testing
+    branches: [ main, develop ]  # Added develop for testing
 
 permissions:
   contents: write
