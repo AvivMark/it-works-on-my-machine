@@ -1,6 +1,7 @@
 apiVersion: v2
 name: it-works-on-my-machine
 description: A Node.js Express application that works on my machine 🧃
+icon: https://raw.githubusercontent.com/kubernetes/kubernetes/master/logo/logo.png
 
 # A chart can be either an 'application' or a 'library' chart.
 #
