@@ -87,14 +87,25 @@ jobs:
           VALIDATE_ALL_CODEBASE: false
           VALIDATE_JAVASCRIPT_ES: true
           IGNORE_GITIGNORED_FILES: true
+  release:
+    needs: [lint, test]
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm ci
+      - name: semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release
 
   docker-build-publish:
     name: Build and publish Docker image
     runs-on: ubuntu-latest
-    needs: 
-      - build
-      - lint
-      - test
+    needs: [build, lint, test, release]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
