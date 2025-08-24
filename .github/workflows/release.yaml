@@ -1,7 +1,7 @@
 name: Release
 on:
   push:
-    branches: [ main, develop ]  # Added develop for testing
+    branches: [ main, develop ]  
 
 permissions:
   contents: write
