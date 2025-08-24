@@ -1,0 +1,11 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: it-works-on-my-machine-app
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+    command: node server.js
