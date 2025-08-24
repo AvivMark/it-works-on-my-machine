@@ -1,3 +1,9 @@
+## [1.0.0-rc.2](https://github.com/AvivMark/it-works-on-my-machine/compare/v1.0.0-rc.1...v1.0.0-rc.2) (2025-08-24)
+
+### Features
+
+* add helm linting and dynamic ([6192643](https://github.com/AvivMark/it-works-on-my-machine/commit/6192643a4484b94fe6f596b374b1ad75cea280ca))
+
 ## 1.0.0-rc.1 (2025-08-24)
 
 ### Features
