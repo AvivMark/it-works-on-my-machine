@@ -1,3 +1,11 @@
+## [1.0.0-rc.3](https://github.com/AvivMark/it-works-on-my-machine/compare/v1.0.0-rc.2...v1.0.0-rc.3) (2025-08-24)
+
+### ⚠ BREAKING CHANGES
+
+* update
+
+* Merge pull request [#3](https://github.com/AvivMark/it-works-on-my-machine/issues/3) from AvivMark/develop ([963af7e](https://github.com/AvivMark/it-works-on-my-machine/commit/963af7e392d4953a2bb3e67ce72a8c897e756494))
+
 ## [1.0.0-rc.2](https://github.com/AvivMark/it-works-on-my-machine/compare/v1.0.0-rc.1...v1.0.0-rc.2) (2025-08-24)
 
 ### Features
