@@ -52,7 +52,7 @@ jobs:
         run: npm install
 
       - name: Run tests with coverage
-        run: npm test -- --coverage --coverageReporters="json-summary" --coverageDirectory=coverage
+        run: npm run test:coverage -- --coverageReporters="json-summary" --coverageDirectory=coverage
 
       - name: Upload coverage artifact
         uses: actions/upload-artifact@v4
@@ -91,7 +91,7 @@ jobs:
           VALIDATE_ALL_CODEBASE: false
           VALIDATE_JAVASCRIPT_ES: true
           IGNORE_GITIGNORED_FILES: true
-          
+
   docker-build-publish:
     name: Build and publish Docker image
     runs-on: ubuntu-latest
