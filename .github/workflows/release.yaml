@@ -1,7 +1,8 @@
 name: Release
 on:
   push:
-    branches: [ main ]
+    branches: [ main ]  # Added develop for testing
+  workflow_dispatch:             # Added manual trigger for testing
 
 permissions:
   contents: write
@@ -64,3 +65,14 @@ jobs:
     permissions:
       contents: write
       packages: write
+
+  deploy-and-test:
+    needs: [release, docker-build, helm-update]
+    if: needs.release.outputs.new_release_published == 'true'
+    uses: ./.github/workflows/deploy.yaml
+    with:
+      version: ${{ needs.release.outputs.new_release_version }}
+      environment: staging
+    permissions:
+      contents: read
+      packages: read

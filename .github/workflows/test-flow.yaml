@@ -1,0 +1,48 @@
+name: Test Complete Flow
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to test with (e.g., 1.0.0)'
+        required: true
+        type: string
+        default: '1.0.0-test'
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  ci-test:
+    uses: ./.github/workflows/ci-core.yaml
+    permissions:
+      contents: read
+      pull-requests: read
+
+  docker-test:
+    needs: ci-test
+    uses: ./.github/workflows/docker.yaml
+    with:
+      version: ${{ inputs.version }}
+    permissions:
+      contents: read
+      packages: write
+
+  helm-test:
+    needs: ci-test
+    uses: ./.github/workflows/helm.yaml
+    with:
+      version: ${{ inputs.version }}
+    permissions:
+      contents: write
+      packages: write
+
+  deploy-test:
+    needs: [ci-test, docker-test, helm-test]
+    uses: ./.github/workflows/deploy.yaml
+    with:
+      version: ${{ inputs.version }}
+      environment: staging
+    permissions:
+      contents: read
+      packages: read
