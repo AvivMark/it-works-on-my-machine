@@ -1,3 +1,9 @@
+## [1.0.0-rc.4](https://github.com/AvivMark/it-works-on-my-machine/compare/v1.0.0-rc.3...v1.0.0-rc.4) (2025-08-24)
+
+### Bug Fixes
+
+* update the workflows ([c94f65d](https://github.com/AvivMark/it-works-on-my-machine/commit/c94f65d1156c04a439503a87dfea2028a0c3d81c))
+
 ## [1.0.0-rc.3](https://github.com/AvivMark/it-works-on-my-machine/compare/v1.0.0-rc.2...v1.0.0-rc.3) (2025-08-24)
 
 ### ⚠ BREAKING CHANGES
