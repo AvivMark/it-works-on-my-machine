@@ -60,6 +60,11 @@ jobs:
           name: coverage-report
           path: coverage
 
+      - name: Setup Python environment
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
       - name: Enforce coverage threshold
         env:
           COVERAGE_THRESHOLD: ${{ env.COVERAGE_THRESHOLD || '80' }}
