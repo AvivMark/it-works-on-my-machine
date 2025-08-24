@@ -14,7 +14,11 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+          os: [ubuntu-latest]
+          node-version: [18, 20]
     steps:
       - name: checkout repo
         uses: actions/checkout@v4
@@ -22,7 +26,7 @@ jobs:
       - name: use nodejs environment
         uses: actions/setup-node@v4
         with: 
-          node-version: '20'
+          node-version: ${{ matrix.node-version }}
           cache: 'npm' 
 
       - name: Install dependencies
@@ -36,7 +40,11 @@ jobs:
           $GITHUB_WORKSPACE/scripts/smoke-test.sh
           kill $SERVER_PID
   test:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+          os: [ubuntu-latest]
+          node-version: [18, 20]
     needs: build
     steps:
       - name: Checkout code
@@ -45,11 +53,11 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
         with: 
-          node-version: '20'
-          cache: 'npm'
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm' 
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Run tests with coverage
         run: npm run test:coverage -- --coverageReporters="json-summary" --coverageDirectory=coverage
@@ -91,16 +99,56 @@ jobs:
     needs: [lint, test]
     if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+          os: [ubuntu-latest]
+          node-version: [18, 20]
+          
     steps:
       - uses: actions/checkout@v4
         with: { fetch-depth: 0 }
+
+      - name: Semantic Release
+        uses: ./
+        id: semantic
+        with:
+          branches: |
+            [
+              '+([0-9])?(.{+([0-9]),x}).x',
+              'master',
+              'main',
+              'next',
+              'next-major',
+              {
+                name: 'beta',
+                prerelease: true
+              },
+              {
+                name: 'alpha',
+                prerelease: true
+              }
+            ]
+          extra_plugins: |
+            @semantic-release/git
+            @semantic-release/changelog
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
       - uses: actions/setup-node@v4
-        with: { node-version: 20 }
+        with:           
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
       - run: npm ci
+      
       - name: semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npx semantic-release
+
+      - name: semantic-release (dry-run)
+        if: github.event_name == 'pull_request'
+        run: npx semantic-release --dry-run
 
   docker-build-publish:
     name: Build and publish Docker image
