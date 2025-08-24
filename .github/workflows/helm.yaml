@@ -1,7 +1,11 @@
 name: Helm Chart Operations
 on:
-  repository_dispatch:
-    types: [helm-update]
+  workflow_call:
+    inputs:
+      version:
+        description: 'Version to update charts to'
+        required: true
+        type: string
   workflow_dispatch:
     inputs:
       version:
@@ -38,7 +42,7 @@ jobs:
 
       - name: Update Chart.yaml & values.yaml
         env:
-          VERSION: ${{ github.event.client_payload.version || inputs.version }}
+          VERSION: ${{ inputs.version }}
         run: |
           PROJECT_NAME=$(node -p "require('./package.json').name")
           CHART_DIR="charts/$PROJECT_NAME"
@@ -49,7 +53,7 @@ jobs:
 
       - name: Commit & push chart updates
         env:
-          VERSION: ${{ github.event.client_payload.version || inputs.version }}
+          VERSION: ${{ inputs.version }}
         run: |
           PROJECT_NAME=$(node -p "require('./package.json').name")
           git config user.name  "github-actions[bot]"
@@ -82,7 +86,7 @@ jobs:
 
       - name: Package & Push Helm Chart
         env:
-          VERSION: ${{ github.event.client_payload.version || inputs.version }}
+          VERSION: ${{ inputs.version }}
         run: |
           PROJECT_NAME=$(node -p "require('./package.json').name")
           CHART_DIR="charts/$PROJECT_NAME"

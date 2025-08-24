@@ -8,32 +8,8 @@ permissions:
   pull-requests: read
 
 jobs:
-  validate:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Trigger CI Core
-        uses: peter-evans/repository-dispatch@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          event-type: ci-validation
-          client-payload: |
-            {
-              "pr_number": "${{ github.event.pull_request.number }}",
-              "head_sha": "${{ github.event.pull_request.head.sha }}"
-            }
-
-      # Wait for CI to complete (optional - you can remove this if you prefer async)
-      - name: Wait for CI completion
-        uses: fountainhead/action-wait-for-check@v1.2.0
-        id: wait-for-ci
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          checkName: "ci-core"
-          ref: ${{ github.event.pull_request.head.sha }}
-          timeoutSeconds: 1800
-
-      - name: Check CI result
-        if: steps.wait-for-ci.outputs.conclusion != 'success'
-        run: |
-          echo "CI validation failed"
-          exit 1
+  ci-core:
+    uses: ./.github/workflows/ci-core.yaml
+    permissions:
+      contents: read
+      pull-requests: read

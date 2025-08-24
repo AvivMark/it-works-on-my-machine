@@ -1,7 +1,11 @@
 name: Docker Build & Publish
 on:
-  repository_dispatch:
-    types: [docker-build]
+  workflow_call:
+    inputs:
+      version:
+        description: 'Version to build'
+        required: true
+        type: string
   workflow_dispatch:
     inputs:
       version:
@@ -48,9 +52,9 @@ jobs:
           tags: |
             type=ref,event=branch
             type=ref,event=pr
-            type=semver,pattern={{version}},value=${{ github.event.client_payload.version || inputs.version }}
-            type=semver,pattern={{major}}.{{minor}},value=${{ github.event.client_payload.version || inputs.version }}
-            type=semver,pattern={{major}},value=${{ github.event.client_payload.version || inputs.version }}
+            type=semver,pattern={{version}},value=${{ inputs.version }}
+            type=semver,pattern={{major}}.{{minor}},value=${{ inputs.version }}
+            type=semver,pattern={{major}},value=${{ inputs.version }}
             type=raw,value=latest,enable={{is_default_branch}}
 
       - name: Determine image tags
@@ -61,7 +65,7 @@ jobs:
           PROJECT_NAME_SAFE=$(echo "${PROJECT_NAME}" | tr '[:upper:]' '[:lower:]' | tr ' ' '-')
           REPO_OWNER=$(echo "$GITHUB_REPOSITORY" | cut -d'/' -f1)
           IMAGE_BASE="ghcr.io/${REPO_OWNER,,}/${PROJECT_NAME_SAFE}"
-          VERSION="${{ github.event.client_payload.version || inputs.version }}"
+          VERSION="${{ inputs.version }}"
 
           echo "tags<<EOF" >> $GITHUB_OUTPUT
           echo "${IMAGE_BASE}:${VERSION}" >> $GITHUB_OUTPUT

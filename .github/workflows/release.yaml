@@ -55,32 +55,22 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  trigger-docker-build:
+  docker-build:
     needs: release
     if: needs.release.outputs.new_release_published == 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Trigger Docker Build
-        uses: peter-evans/repository-dispatch@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          event-type: docker-build
-          client-payload: |
-            {
-              "version": "${{ needs.release.outputs.new_release_version }}"
-            }
+    uses: ./.github/workflows/docker.yaml
+    with:
+      version: ${{ needs.release.outputs.new_release_version }}
+    permissions:
+      contents: read
+      packages: write
 
-  trigger-helm-update:
+  helm-update:
     needs: release
     if: needs.release.outputs.new_release_published == 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Trigger Helm Update
-        uses: peter-evans/repository-dispatch@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          event-type: helm-update
-          client-payload: |
-            {
-              "version": "${{ needs.release.outputs.new_release_version }}"
-            }
+    uses: ./.github/workflows/helm.yaml
+    with:
+      version: ${{ needs.release.outputs.new_release_version }}
+    permissions:
+      contents: write
+      packages: write
