@@ -1,7 +1,7 @@
-// Use the manual mock in __mocks__/aws-sdk.js
+// Use the manual mock in tests/__mocks__/aws-sdk.js
 jest.mock('aws-sdk');
 
-const s3Client = require('./s3Client');
+const s3Client = require('../../src/services/s3Client');
 
 describe('s3Client with mocked aws-sdk', () => {
   const Bucket = 'my-bucket';

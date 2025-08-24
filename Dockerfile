@@ -4,6 +4,7 @@ WORKDIR /app
 
 FROM base AS build
 
+# BETTER TO USE DUMB INIT IN CASE OF FORKING OR SUB THREAD TO MAKE SURE THE NODEJS APP GET THE SIGTERM
 RUN --mount=type=cache,target=/var/cache/apk apk add --no-cache dumb-init
 
 COPY package*.json ./
