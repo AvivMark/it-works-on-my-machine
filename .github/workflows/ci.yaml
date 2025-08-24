@@ -64,7 +64,7 @@ jobs:
         env:
           COVERAGE_THRESHOLD: ${{ env.COVERAGE_THRESHOLD || '80' }}
         run: |
-          .github/scripts/get_coverage.py
+          python .github/scripts/get_coverage.py
 
   lint:
     runs-on: ubuntu-latest
