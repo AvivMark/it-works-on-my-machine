@@ -64,16 +64,7 @@ jobs:
         env:
           COVERAGE_THRESHOLD: ${{ env.COVERAGE_THRESHOLD || '80' }}
         run: |
-          node - <<'NODE'
-          const fs = require('fs');
-          const p = 'coverage/coverage-summary.json';
-          if (!fs.existsSync(p)) { console.error('coverage summary not found at', p); process.exit(1) }
-          const s = JSON.parse(fs.readFileSync(p, 'utf8'));
-          const pct = s.total && s.total.lines && s.total.lines.pct || 0;
-          const thr = parseFloat(process.env.COVERAGE_THRESHOLD || '80');
-          console.log(`Coverage lines: ${pct}% (threshold ${thr}%)`);
-          if (pct < thr) { console.error(`Coverage ${pct}% is below threshold ${thr}%`); process.exit(1) }
-          NODE
+          ./script/get_coverage.py
 
   lint:
     runs-on: ubuntu-latest
@@ -114,24 +105,20 @@ jobs:
         id: tagger
         run: |
           set -euo pipefail
-          PROJECT_NAME="${PROJECT_NAME:-$(node -p \"require('./package.json').name || ''\")}"
+          PROJECT_NAME=$(node -p "require('./package.json').name" || ''\")
           PROJECT_NAME_SAFE="$(echo \"${PROJECT_NAME}\" | tr '[:upper:]' '[:lower:]' | tr ' ' '-')"
           REPO_OWNER=$(echo "$GITHUB_REPOSITORY" | cut -d'/' -f1)
           IMAGE_BASE="ghcr.io/${REPO_OWNER,,}/${PROJECT_NAME_SAFE}"
-
+          BRANCH_NAME=${{ github.ref_name }}
           VERSION=$(node -p "require('./package.json').version")
 
           echo "tags<<EOF" >> $GITHUB_OUTPUT
-          if [ -n "${VERSION}" ]; then
-            echo "${IMAGE_BASE}:${VERSION}" >> $GITHUB_OUTPUT
-          else
-            # use to commit sha if version missing
-            echo "${IMAGE_BASE}:${GITHUB_SHA}" >> $GITHUB_OUTPUT
-          fi
-          
-          # Always also publish the SHA and latest tags for traceability
+
+          echo "${IMAGE_BASE}:${VERSION}" >> $GITHUB_OUTPUT
           echo "${IMAGE_BASE}:${GITHUB_SHA}" >> $GITHUB_OUTPUT
-          echo "${IMAGE_BASE}:latest" >> $GITHUB_OUTPUT
+          if [ "${{ github.ref_name }}" -eq "main" ]; then
+            echo "${IMAGE_BASE}:latest" >> $GITHUB_OUTPUT
+          fi
           echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Build and push image to GHCR

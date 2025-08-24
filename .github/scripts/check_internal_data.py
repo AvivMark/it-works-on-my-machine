@@ -27,7 +27,7 @@ PATTERNS = [
     r"\bcorp\.[a-z0-9-]+\b",
     r"\bint\.[a-z0-9-]+\b",
     r"\bprivate\.[a-z0-9-]+\b",
-    r"\bmy-company\b",
+    r"\biron\b",
 ]
 
 
@@ -66,7 +66,6 @@ def search_file(path: Path, regexes, literals):
             matches.append((path, start, snippet, m.group(0)))
 
     for lit in literals:
-        # case-insensitive literal search
         for idx, line in enumerate(text.splitlines(), start=1):
             if lit.lower() in line.lower():
                 matches.append((path, idx, line[:200], lit))
