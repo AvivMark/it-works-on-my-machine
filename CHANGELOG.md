@@ -1,3 +1,10 @@
+## [1.0.0-alpha.11](https://github.com/AvivMark/it-works-on-my-machine/compare/v1.0.0-alpha.10...v1.0.0-alpha.11) (2025-08-25)
+
+### Bug Fixes
+
+* add readme lines ([b7c90e1](https://github.com/AvivMark/it-works-on-my-machine/commit/b7c90e10628dfedd4d0f136ef09db35857add4b4))
+* use dry run ([a881fbd](https://github.com/AvivMark/it-works-on-my-machine/commit/a881fbda876ae494be1d612467757901b59de826))
+
 ## [1.0.0-alpha.10](https://github.com/AvivMark/it-works-on-my-machine/compare/v1.0.0-alpha.9...v1.0.0-alpha.10) (2025-08-25)
 
 ### Features
