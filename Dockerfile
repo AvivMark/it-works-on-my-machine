@@ -9,7 +9,7 @@ RUN --mount=type=cache,target=/var/cache/apk apk add --no-cache dumb-init
 
 COPY package*.json ./
 
-RUN npm ci \
+RUN npm ci --omit \
     && npm prune --production \
     && rm -rf package-lock.json 
 
