@@ -54,3 +54,5 @@ The ci main workflow handles all the linting and testing of the service:
 - Becuase i used s3 connection, i would like to add cicd tests using pulumi for that s3 resource
 - will add monitoring  metrics in the project
 - templating the dockerfile and check him too( missing checks)
+- permmission handling - only specific people can push to main and deploy
+- raise envs for pr - for each pr if workflow is complete to mkae sure it will push from develop to main by itself
