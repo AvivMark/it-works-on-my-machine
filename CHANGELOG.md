@@ -1,3 +1,10 @@
+## [1.0.0-alpha.5](https://github.com/AvivMark/it-works-on-my-machine/compare/v1.0.0-alpha.4...v1.0.0-alpha.5) (2025-08-25)
+
+### Bug Fixes
+
+* added needed moduel for version ([a37b0fa](https://github.com/AvivMark/it-works-on-my-machine/commit/a37b0fa5dae0661cb5c3c9be022073e0d50e0d1d))
+* remove unwanted deps ([16baa36](https://github.com/AvivMark/it-works-on-my-machine/commit/16baa3667ead79ab8a60ac526ca8901c922955dd))
+
 ## [1.0.0-alpha.4](https://github.com/AvivMark/it-works-on-my-machine/compare/v1.0.0-alpha.3...v1.0.0-alpha.4) (2025-08-25)
 
 ### Bug Fixes
