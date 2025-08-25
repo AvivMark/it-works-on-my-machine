@@ -1,3 +1,9 @@
+## [1.0.0-alpha.3](https://github.com/AvivMark/it-works-on-my-machine/compare/v1.0.0-alpha.2...v1.0.0-alpha.3) (2025-08-25)
+
+### Bug Fixes
+
+* add ci explanation ([53fb0a1](https://github.com/AvivMark/it-works-on-my-machine/commit/53fb0a1ab64d2a316a1e414bc3799a9053895545))
+
 ## [1.0.0-alpha.2](https://github.com/AvivMark/it-works-on-my-machine/compare/v1.0.0-alpha.1...v1.0.0-alpha.2) (2025-08-25)
 
 ### Features
