@@ -69,13 +69,34 @@ jobs:
       packages: write
       actions: read
 
-  deploy-and-test:
+  deploy-and-test-dev:
     needs: [build-publish-docker, build-publish-chart, release-version]
-    if: needs.release-version.outputs.new_release_published == 'true'
+    if: needs.release-version.outputs.new_release_published == 'true' || github.ref == 'refs/heads/develop'
+    uses: ./.github/workflows/deploy.yaml
+    with:
+      version: ${{ needs.release-version.outputs.new_release_version }}
+      environment: develop
+    permissions:
+      contents: read
+      packages: read
+  
+  deploy-staging:
+    needs: [deploy-and-test-dev]
     uses: ./.github/workflows/deploy.yaml
     with:
       version: ${{ needs.release-version.outputs.new_release_version }}
       environment: staging
+    permissions:
+      contents: read
+      packages: read
+  
+  deploy-prod:
+    needs: [deploy-staging]
+    if: github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/deploy.yaml
+    with:
+      version: ${{ needs.release-version.outputs.new_release_version }}
+      environment: production
     permissions:
       contents: read
       packages: read
