@@ -54,7 +54,6 @@ jobs:
           sleep 5
           $GITHUB_WORKSPACE/scripts/smoke-test.sh
           kill $SERVER_PID || true
-          runs-on: ubuntu-latest
 
       - name: NPM Audit Scan and Generate Report in JSON Format
         run: npm audit --json > npm-audit-results.json
