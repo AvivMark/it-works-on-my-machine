@@ -1,3 +1,9 @@
+## [1.0.0-alpha.10](https://github.com/AvivMark/it-works-on-my-machine/compare/v1.0.0-alpha.9...v1.0.0-alpha.10) (2025-08-25)
+
+### Features
+
+* prod and staging deployment if needed ([bbf707f](https://github.com/AvivMark/it-works-on-my-machine/commit/bbf707f3621ed2423086ce1efc37862ba357c326))
+
 ## [1.0.0-alpha.9](https://github.com/AvivMark/it-works-on-my-machine/compare/v1.0.0-alpha.8...v1.0.0-alpha.9) (2025-08-25)
 
 ### Bug Fixes
