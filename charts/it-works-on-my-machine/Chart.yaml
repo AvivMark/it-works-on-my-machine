@@ -1,6 +1,10 @@
 apiVersion: v2
 name: it-works-on-my-machine
+<<<<<<< HEAD
 description: A Node.js Express application that works on my machine
+=======
+description: "A Node.js Express application that works on my machine \U0001F9C3"
+>>>>>>> 75ff728cd00709ffb534e2e80f802f46f5ecdb01
 icon: https://raw.githubusercontent.com/kubernetes/kubernetes/master/logo/logo.png
 type: application
 version: 1.0.0

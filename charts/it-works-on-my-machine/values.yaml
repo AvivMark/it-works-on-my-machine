@@ -1,73 +1,76 @@
-# Default values for it-works-on-my-machine.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
 
-# This will set the replicaset count more information can be found here: https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/
-replicaCount: 1
+# Global values (can be overridden by parent charts)
+global:
+  imageRegistry: ""
+  imagePullSecrets: []
 
-# This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
+# Application configuration
+app:
+  name: it-works-on-my-machine
+  version: "1.0.0"
+  
+# Image configuration
 image:
-  repository: nginx
+  repository: AvivMark/it-works-on-my-machine
   # This sets the pull policy for images.
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
-
-# This is for the secrets for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  
+# Image pull secrets
 imagePullSecrets: []
-# This is to override the chart name.
-nameOverride: ""
-fullnameOverride: ""
 
-# This section builds out the service account more information can be found here: https://kubernetes.io/docs/concepts/security/service-accounts/
+# Service account configuration
 serviceAccount:
   # Specifies whether a service account should be created
   create: true
-  # Automatically mount a ServiceAccount's API credentials?
-  automount: true
   # Annotations to add to the service account
   annotations: {}
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 
-# This is for setting Kubernetes Annotations to a Pod.
-# For more information checkout: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+# Pod annotations and labels
 podAnnotations: {}
-# This is for setting Kubernetes Labels to a Pod.
-# For more information checkout: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 podLabels: {}
 
-podSecurityContext: {}
-  # fsGroup: 2000
+# Pod security context
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+  fsGroup: 1000
 
-securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
+# Container security context
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 1000
 
-# This is for setting up a service more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/
+# Service configuration
 service:
-  # This sets the service type more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
   type: ClusterIP
-  # This sets the ports more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports
-  port: 80
+  port: 3000
+  targetPort: 3000
+  annotations: {}
 
-# This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
+# Ingress configuration
 ingress:
   enabled: false
   className: ""
   annotations: {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
+    # cert-manager.io/cluster-issuer: letsencrypt-prod
   hosts:
     - host: chart-example.local
       paths:
         - path: /
-          pathType: ImplementationSpecific
+          pathType: Prefix
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
@@ -101,23 +104,107 @@ autoscaling:
   minReplicas: 1
   maxReplicas: 100
   targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
 
-# Additional volumes on the output Deployment definition.
-volumes: []
-# - name: foo
-#   secret:
-#     secretName: mysecret
-#     optional: false
+# Replica count (ignored if autoscaling is enabled)
+replicaCount: 1
 
-# Additional volumeMounts on the output Deployment definition.
-volumeMounts: []
-# - name: foo
-#   mountPath: "/etc/foo"
-#   readOnly: true
+# Liveness and readiness probes
+livenessProbe:
+  httpGet:
+    path: /health
+    port: http
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
+  successThreshold: 1
 
+readinessProbe:
+  httpGet:
+    path: /health
+    port: http
+  initialDelaySeconds: 10
+  periodSeconds: 5
+  timeoutSeconds: 5
+  failureThreshold: 3
+  successThreshold: 1
+
+# Startup probe (for slow starting containers)
+startupProbe:
+  httpGet:
+    path: /health
+    port: http
+  initialDelaySeconds: 10
+  periodSeconds: 5
+  timeoutSeconds: 5
+  failureThreshold: 30
+  successThreshold: 1
+
+# Node selection
 nodeSelector: {}
 
+# Tolerations
 tolerations: []
 
+# Affinity rules
 affinity: {}
+
+# Pod disruption budget
+podDisruptionBudget:
+  enabled: false
+  # minAvailable: 1
+  # maxUnavailable: 1
+
+# Network policy
+networkPolicy:
+  enabled: false
+  ingress: []
+  egress: []
+
+# Extra environment variables
+env: []
+# - name: NODE_ENV
+#   value: production
+
+# Extra environment variables from secrets/configmaps
+envFrom: []
+# - secretRef:
+#     name: my-secret
+# - configMapRef:
+#     name: my-configmap
+
+# Volume mounts
+volumeMounts: []
+# - name: tmp
+#   mountPath: /tmp
+#   readOnly: false
+
+# Volumes
+volumes: []
+# - name: tmp
+#   emptyDir: {}
+
+# Init containers
+initContainers: []
+
+# Sidecar containers
+sidecars: []
+
+# Service monitor 
+serviceMonitor:
+  enabled: false
+  labels: {}
+  annotations: {}
+  interval: 30s
+  path: /metrics
+  port: http
+
+# Pod monitor 
+podMonitor:
+  enabled: false
+  labels: {}
+  annotations: {}
+  interval: 30s
+  path: /metrics
+  port: http
