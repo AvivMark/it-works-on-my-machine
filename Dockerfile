@@ -15,6 +15,8 @@ RUN npm ci --omit \
 
 FROM base AS production
 
+WORKDIR /app
+
 ENV NODE_ENV=production
 COPY --from=build /usr/bin/dumb-init /usr/bin/dumb-init
 COPY --from=build /app/. /app
@@ -24,4 +26,4 @@ USER node
 
 EXPOSE 3000
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
-CMD ["node", "src/server.js"]
+CMD ["npm", "start"]
