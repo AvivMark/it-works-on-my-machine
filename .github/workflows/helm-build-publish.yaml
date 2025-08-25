@@ -1,14 +1,19 @@
 name: Helm Chart CI/CD (chart-only)
 
 on:
-  pull_request:
-    paths:
-      - "chart/**"
-  push:
-    branches: [ "main", "develop", "feat" ]
-    paths:
-      - "chart/**"
+  workflow_call:
+    inputs:
+      version:
+        description: 'Version to build'
+        required: true
+        type: string
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to build'
+        required: true
+        type: string
+
 
 permissions:
   contents: write
