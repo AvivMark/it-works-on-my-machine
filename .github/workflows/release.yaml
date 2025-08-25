@@ -30,7 +30,9 @@ jobs:
           cache: 'npm'
       
       - name: Install dependencies
-        run: npm ci
+        run: |
+          npm ci
+          npm i conventional-changelog-conventionalcommits
       
       - name: Semantic Release
         id: semantic
