@@ -1,3 +1,9 @@
+## [1.0.0-alpha.4](https://github.com/AvivMark/it-works-on-my-machine/compare/v1.0.0-alpha.3...v1.0.0-alpha.4) (2025-08-25)
+
+### Bug Fixes
+
+* update vulnarabilities ([69d85e3](https://github.com/AvivMark/it-works-on-my-machine/commit/69d85e370d2a2adcc1ae091848dac2ad5c080a55))
+
 ## [1.0.0-alpha.3](https://github.com/AvivMark/it-works-on-my-machine/compare/v1.0.0-alpha.2...v1.0.0-alpha.3) (2025-08-25)
 
 ### Bug Fixes
