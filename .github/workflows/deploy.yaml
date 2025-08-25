@@ -25,6 +25,9 @@ on:
         required: false
         type: string
         default: 'staging'
+concurrency:
+  group: cd-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
