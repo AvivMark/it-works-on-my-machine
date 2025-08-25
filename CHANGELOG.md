@@ -1,3 +1,9 @@
+## [1.0.0-rc.5](https://github.com/AvivMark/it-works-on-my-machine/compare/v1.0.0-rc.4...v1.0.0-rc.5) (2025-08-25)
+
+### Bug Fixes
+
+* remove unwanted data ([ab17e97](https://github.com/AvivMark/it-works-on-my-machine/commit/ab17e97f895df00d3ce9aea653c8dc237085e34e))
+
 ## [1.0.0-rc.4](https://github.com/AvivMark/it-works-on-my-machine/compare/v1.0.0-rc.3...v1.0.0-rc.4) (2025-08-24)
 
 ### Bug Fixes
