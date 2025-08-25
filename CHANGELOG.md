@@ -1,3 +1,16 @@
+## [1.0.0-alpha.2](https://github.com/AvivMark/it-works-on-my-machine/compare/v1.0.0-alpha.1...v1.0.0-alpha.2) (2025-08-25)
+
+### Features
+
+* add minor feature to test version increment ([96c8ba5](https://github.com/AvivMark/it-works-on-my-machine/commit/96c8ba50e063911354faed26050a88cc5b1c66bd))
+
+### Bug Fixes
+
+* clean test for patch increment ([c2a4a7c](https://github.com/AvivMark/it-works-on-my-machine/commit/c2a4a7cefc7e15326e46417de89346d66ba309be))
+* more patch version increment ([56502ca](https://github.com/AvivMark/it-works-on-my-machine/commit/56502cac5c2044c020cbbc108f08e70d2561bda6))
+* test patch version increment ([1f8d00d](https://github.com/AvivMark/it-works-on-my-machine/commit/1f8d00d6f3e5161f7caad008a62fd9d1f8c2b92d))
+* updare release versioning ([0904759](https://github.com/AvivMark/it-works-on-my-machine/commit/090475989d77a2d77e5a32d20598fcd54192e791))
+
 ## 1.0.0-alpha.1 (2025-08-25)
 
 ### ⚠ BREAKING CHANGES
