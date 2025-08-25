@@ -1,6 +1,20 @@
 name: Deploy & Test
 on:
+  pull_request:
+    types: [closed]
+    branches: [ main, develop ]
   workflow_call:
+    inputs:
+      version:
+        description: 'Version to deploy and test'
+        required: true
+        type: string
+      environment:
+        description: 'Environment to deploy to (staging, production)'
+        required: false
+        type: string
+        default: 'staging'
+  workflow_dispatch:
     inputs:
       version:
         description: 'Version to deploy and test'
