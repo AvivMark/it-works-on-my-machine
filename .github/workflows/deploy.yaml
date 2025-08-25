@@ -181,7 +181,7 @@ jobs:
             --namespace "${{ secrets.NAMESPACE }}" --create-namespace \
             --set image.repository=ghcr.io/${{ github.repository }} \
             --set image.tag=${{ github.sha }} \
-            --wait --timeout 5m
+            --dry-run
 
           
       - name: Health check rollout
