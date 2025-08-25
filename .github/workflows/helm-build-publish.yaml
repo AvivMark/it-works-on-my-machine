@@ -8,10 +8,7 @@ on:
     branches: [ "main", "develop", "feat" ]
     paths:
       - "chart/**"
-<<<<<<< HEAD
   workflow_dispatch:
-=======
->>>>>>> 75ff728cd00709ffb534e2e80f802f46f5ecdb01
 
 permissions:
   contents: write

@@ -1,10 +1,6 @@
 {
   "name": "it-works-on-my-machine",
-<<<<<<< HEAD
   "version": "1.0.0-rc.7",
-=======
-  "version": "1.0.0-rc.6",
->>>>>>> 75ff728cd00709ffb534e2e80f802f46f5ecdb01
   "main": "index.js",
   "scripts": {
     "start": "node src/server.js",
