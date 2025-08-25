@@ -4,9 +4,9 @@ on:
 
 permissions:
   contents: read
-  pull-requests: read
+
 jobs:
-  
+
   scan-internal-links:
     name: Scan for unwanted urls and ips
     runs-on: ubuntu-latest
