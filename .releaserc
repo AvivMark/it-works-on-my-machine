@@ -1,8 +1,9 @@
 {
   "tagFormat": "v${version}",
+  "repositoryUrl": "git@github.com:AvivMark/it-works-on-my-machine.git",
   "branches": [
     "main",
-    { "name": "develop", "prerelease": "beta" },
+    { "name": "develop", "prerelease": false },
     { "name": "feat-*", "prerelease": "alpha" },
     { "name": "r-*", "prerelease": "rc" }
   ],
@@ -22,11 +23,10 @@
           { "type": "style", "release": false },
           { "type": "test", "release": false },
           { "type": "chore", "release": false },
-          { "type": "ci", "release": false },
-          { "breaking": true, "release": "major" }
+          { "type": "ci", "release": false }
         ],
         "parserOpts": {
-          "noteKeywords": ["BREAKING CHANGE", "BREAKING CHANGES", "BREAKING"]
+          "noteKeywords": ["BREAKING CHANGE:", "BREAKING CHANGES:"]
         }
       }
     ],
