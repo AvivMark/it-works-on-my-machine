@@ -47,26 +47,28 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  release-chart:
+  build-publish-chart:
     needs: release-version
     uses: ./.github/workflows/helm-build-publish.yaml
     with:
       version: ${{ needs.release-version.outputs.new_release_version }}
     permissions:
-      contents: read
+      contents: write
       packages: write
+      actions: read
 
-  build-publish:
+  build-publish-docker:
     needs: release-version
     uses: ./.github/workflows/docker-build-publish.yaml
     with:
       version: ${{ needs.release-version.outputs.new_release_version }}
     permissions:
-      contents: read
+      contents: write
       packages: write
+      actions: read
 
   deploy-and-test:
-    needs: [build-publish, release-chart, release-version]
+    needs: [build-publish-docker, build-publish-chart, release-version]
     if: needs.release-version.outputs.new_release_published == 'true'
     uses: ./.github/workflows/deploy.yaml
     with:
