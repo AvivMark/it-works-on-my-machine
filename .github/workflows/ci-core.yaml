@@ -85,6 +85,7 @@ jobs:
     permissions:
       contents: write
       packages: write
+      actions: read
 
 
 
