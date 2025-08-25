@@ -1,3 +1,9 @@
+## [1.0.0-alpha.7](https://github.com/AvivMark/it-works-on-my-machine/compare/v1.0.0-alpha.6...v1.0.0-alpha.7) (2025-08-25)
+
+### Bug Fixes
+
+* better readme ([edb21d6](https://github.com/AvivMark/it-works-on-my-machine/commit/edb21d6eb471b6173793e0cdde565c1c764c7add))
+
 ## [1.0.0-alpha.6](https://github.com/AvivMark/it-works-on-my-machine/compare/v1.0.0-alpha.5...v1.0.0-alpha.6) (2025-08-25)
 
 ### Bug Fixes
