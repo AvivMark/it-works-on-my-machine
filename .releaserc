@@ -2,7 +2,9 @@
   "tagFormat": "v${version}",
   "branches": [
     "main",
-    { "name": "develop", "prerelease": "rc" }
+    { "name": "develop", "prerelease": "beta" },
+    { "name": "feat-*", "prerelease": "alpha" },
+    { "name": "r-*", "prerelease": "rc" }
   ],
   "plugins": [
     [
@@ -20,8 +22,12 @@
           { "type": "style", "release": false },
           { "type": "test", "release": false },
           { "type": "chore", "release": false },
+          { "type": "ci", "release": false },
           { "breaking": true, "release": "major" }
-        ]
+        ],
+        "parserOpts": {
+          "noteKeywords": ["BREAKING CHANGE", "BREAKING CHANGES", "BREAKING"]
+        }
       }
     ],
     [
