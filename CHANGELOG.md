@@ -1,3 +1,10 @@
+## [1.0.0-alpha.6](https://github.com/AvivMark/it-works-on-my-machine/compare/v1.0.0-alpha.5...v1.0.0-alpha.6) (2025-08-25)
+
+### Bug Fixes
+
+* remove unwantd packages from package lock ([5fac20d](https://github.com/AvivMark/it-works-on-my-machine/commit/5fac20db7d5bba1f1f396b0646f446ad2ccc2224))
+* update all cross spawn version ([2847caa](https://github.com/AvivMark/it-works-on-my-machine/commit/2847caaef3fc18dc380ae5d61c3655e379138a42))
+
 ## [1.0.0-alpha.5](https://github.com/AvivMark/it-works-on-my-machine/compare/v1.0.0-alpha.4...v1.0.0-alpha.5) (2025-08-25)
 
 ### Bug Fixes
