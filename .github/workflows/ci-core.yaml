@@ -80,6 +80,13 @@ jobs:
       contents: read
       packages: write
 
+  versioning:
+    needs: [security-tests]
+    uses: ./.github/workflows/release.yaml
+    permissions:
+      contents: write
+      packages: write
+
 
 
 
