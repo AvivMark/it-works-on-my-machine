@@ -1,17 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Usage:
-#   bump-helm.sh <version> [--also-appversion] [--also-image-tag] [--charts-root charts]
-#
-# Examples:
-#   bump-helm.sh 1.2.3
-#   bump-helm.sh 1.2.3 --also-appversion --also-image-tag
-#
-# Tips:
-#   In .releaserc use:
-#     ["@semantic-release/exec", { "prepareCmd": "bash scripts/bump-helm.sh ${nextRelease.version} --also-appversion --also-image-tag" }]
-
 VERSION="${1:-}"
 shift || true
 
@@ -34,7 +23,6 @@ if [[ -z "${VERSION}" ]]; then
   exit 2
 fi
 
-# --- deps ---
 need() { command -v "$1" >/dev/null 2>&1 || { echo "missing $1" >&2; exit 1; }; }
 if ! command -v yq >/dev/null 2>&1; then
   echo "yq not found; installing v4 to /usr/local/bin ..."
@@ -44,9 +32,7 @@ fi
 need git
 need yq
 need awk
-command -v helm >/dev/null 2>&1 || echo "warn: helm not found; skipping lint"
 
-# --- find changed chart dirs since last tag ---
 LAST_TAG="$(git describe --tags --abbrev=0 2>/dev/null || true)"
 if [[ -n "$LAST_TAG" ]]; then
   RANGE="${LAST_TAG}..HEAD"
@@ -56,8 +42,7 @@ fi
 
 CHANGED_DIRS=$(
   git diff --name-only $RANGE -- "${CHARTS_ROOT}/" \
-    | awk -F/ -v root="${CHARTS_ROOT}" -v OFS="/" \
-      'index($0, root"/")==1 {print root, $2}' \
+    | cut -d/ -f1-2 \
     | sort -u
 )
 
