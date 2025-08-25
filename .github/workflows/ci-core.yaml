@@ -3,7 +3,7 @@ on:
   pull_request:
     branches: [ main, develop ]
   push:
-    branches: [ main, develop, feat/* ]
+    branches: [ main, develop, feat-* ]
   workflow_call:
 
 permissions:
