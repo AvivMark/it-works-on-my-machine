@@ -1,4 +1,4 @@
-name: CI Main - Tests and Quality gates
+name: CI Main
 on:
   pull_request:
     branches: [ main, develop ]

@@ -1,7 +1,7 @@
 name: Release
 on:
   workflow_run:
-    workflows: ["CI Main - Tests Linting and security"]
+    workflows: ["CI Main"]
     types:
         - completed
 
@@ -75,8 +75,8 @@ jobs:
     needs: release-version
     uses: ./.github/workflows/docker-build-publish.yaml
     with:
-      version: ${{ needs.release.outputs.new_release_version }}
-      publish: ${{ needs.release.outputs.new_release_published }}
+      version: ${{ needs.release-version.outputs.new_release_version }}
+      publish: ${{ needs.release-version.outputs.new_release_published }}
     permissions:
       contents: read
       packages: write
