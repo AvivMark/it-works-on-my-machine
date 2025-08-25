@@ -1,3 +1,10 @@
+## [1.0.0-alpha.8](https://github.com/AvivMark/it-works-on-my-machine/compare/v1.0.0-alpha.7...v1.0.0-alpha.8) (2025-08-25)
+
+### Bug Fixes
+
+* better docker image command ([cd3005b](https://github.com/AvivMark/it-works-on-my-machine/commit/cd3005be06a98d84f636894f823cb8ad50f642cd))
+* docker image is better ([7113fd4](https://github.com/AvivMark/it-works-on-my-machine/commit/7113fd4c03b07f5d140096455787515834da661d))
+
 ## [1.0.0-alpha.7](https://github.com/AvivMark/it-works-on-my-machine/compare/v1.0.0-alpha.6...v1.0.0-alpha.7) (2025-08-25)
 
 ### Bug Fixes
