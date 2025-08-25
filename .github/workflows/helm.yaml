@@ -1,0 +1,106 @@
+name: Helm Chart Operations
+on:
+  workflow_call:
+    inputs:
+      version:
+        description: 'Version to update charts to'
+        required: true
+        type: string
+      environment:
+        description: 'Target environment (main, staging, production)'
+        required: false
+        type: string
+        default: 'main'
+      update_chart:
+        description: 'Whether to update chart files and push'
+        required: false
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+  packages: write
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  update-helm-chart:
+    runs-on: ubuntu-latest
+    # Only update chart files when targeting main or staging environments
+    if: inputs.update_chart == true && (inputs.environment == 'main' || inputs.environment == 'staging')
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with: 
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install yq
+        run: |
+          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/v4.44.3/yq_linux_amd64
+          sudo chmod +x /usr/local/bin/yq
+
+      - name: Update Chart.yaml & values.yaml
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          PROJECT_NAME=$(node -p "require('./package.json').name")
+          CHART_DIR="charts/$PROJECT_NAME"
+          
+          yq -i ".version = \"$VERSION\""     "$CHART_DIR/Chart.yaml"
+          yq -i ".appVersion = \"$VERSION\""  "$CHART_DIR/Chart.yaml"
+          yq -i ".image.tag = \"$VERSION\""   "$CHART_DIR/values.yaml"
+
+      - name: Commit & push chart updates
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          PROJECT_NAME=$(node -p "require('./package.json').name")
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "charts/$PROJECT_NAME/Chart.yaml" "charts/$PROJECT_NAME/values.yaml"
+          git commit -m "chore(chart): bump to $VERSION [skip ci]" || echo "No changes"
+          git push
+
+  package-and-push-helm-chart:
+    runs-on: ubuntu-latest
+    needs: update-helm-chart
+    if: always() && (needs.update-helm-chart.result == 'success' || needs.update-helm-chart.result == 'skipped')
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with: 
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v4
+
+      - name: Helm login to GHCR
+        run: echo $CR_PAT | helm registry login ghcr.io -u $GITHUB_ACTOR --password-stdin
+        env:
+          CR_PAT: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Package & Push Helm Chart
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          PROJECT_NAME=$(node -p "require('./package.json').name")
+          CHART_DIR="charts/$PROJECT_NAME"
+          REPO_OWNER=$(echo "$GITHUB_REPOSITORY" | cut -d'/' -f1)
+          
+          echo "📦 Packaging Helm chart for environment: ${{ inputs.environment }}"
+          echo "📋 Update chart files: ${{ inputs.update_chart }}"
+          
+          helm package "$CHART_DIR" --version "$VERSION" --app-version "$VERSION"
+          helm push "$PROJECT_NAME-$VERSION.tgz" "oci://ghcr.io/${REPO_OWNER,,}/charts"

@@ -1,0 +1,84 @@
+name: CI Main
+on:
+  pull_request:
+    branches: [ main, develop ]
+  push:
+    branches: [ main, develop, feat/* ]
+  workflow_call:
+
+permissions:
+  contents: read
+
+env:
+  COVERAGE_THRESHOLD: '80'
+  NODE_VERSION: '20'
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with: 
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run tests with coverage
+        run: npm run test:coverage -- --coverageReporters="json-summary" --coverageDirectory=coverage
+      
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage
+      
+      - name: Setup Python environment
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      
+      - name: Enforce coverage threshold
+        env:
+          COVERAGE_THRESHOLD: ${{ env.COVERAGE_THRESHOLD }}
+        run: python .github/scripts/get_coverage.py
+      
+      - name: Smoke Tests
+        run: |
+          npm start & SERVER_PID=$!
+          sleep 5
+          $GITHUB_WORKSPACE/scripts/smoke-test.sh
+          kill $SERVER_PID || true
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Run Super-Linter
+        uses: github/super-linter@v6
+        env:
+          DEFAULT_BRANCH: main
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VALIDATE_ALL_CODEBASE: false
+          VALIDATE_JAVASCRIPT_ES: true
+          IGNORE_GITIGNORED_FILES: true
+
+  security-tests:
+    needs: [tests, lint]
+    uses: ./.github/workflows/security.yaml
+    permissions:
+      contents: read
+      packages: write
+
+
+
+

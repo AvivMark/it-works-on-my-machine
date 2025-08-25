@@ -31,6 +31,12 @@
     [
       "@semantic-release/changelog",
       { "changelogFile": "CHANGELOG.md" }
+    ], 
+    [
+      "@semantic-release/exec",
+      {
+        "prepareCmd": "bash scripts/bump-helm.sh ${nextRelease.version} --also-appversion --also-image-tag"
+      }
     ],
     [
       "@semantic-release/npm",
