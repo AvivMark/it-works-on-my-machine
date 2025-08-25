@@ -1,0 +1,33 @@
+name: code Security Tests workflow
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+  pull-requests: read
+jobs:
+  
+  scan-internal-links:
+    name: Scan for unwanted urls and ips
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run internal data scan
+        run: |
+          python3 .github/scripts/check_internal_data.py
+
+  scan-secret-data:
+    name: gitleaks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+

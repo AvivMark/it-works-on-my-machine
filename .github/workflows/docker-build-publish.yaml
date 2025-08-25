@@ -6,12 +6,10 @@ on:
         description: 'Version to build'
         required: true
         type: string
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version to build'
+      publish:
+        description: 'Will be Published'
         required: true
-        type: string
+        type: boolean
 
 permissions:
   contents: read
@@ -72,6 +70,8 @@ jobs:
           echo "${IMAGE_BASE}:${GITHUB_SHA}" >> $GITHUB_OUTPUT
           if [ "${{ github.ref_name }}" == "main" ]; then
             echo "${IMAGE_BASE}:latest" >> $GITHUB_OUTPUT
+          else 
+            echo "${IMAGE_BASE}:${{ github.ref_name }}" >> $GITHUB_OUTPUT
           fi
           echo "EOF" >> $GITHUB_OUTPUT
 
@@ -83,3 +83,28 @@ jobs:
           tags: ${{ steps.tagger.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           file: ./Dockerfile
+
+      - name: Docker Scout Quickview and CVEs
+        uses: docker/scout-action@v1
+        with:
+          command: quickview,cves
+          image: ${{ steps.tagger.outputs.tags }}
+
+      - name: Docker Scout SBOM
+        uses: docker/scout-action@v1
+        with:
+          command: sbom
+          image: ${{ steps.tagger.outputs.tags }}
+          output: sbom.json
+
+      - name: Docker Scout Recommendations
+        uses: docker/scout-action@v1
+        with:
+          command: recommendations
+          image: ${{ steps.tagger.outputs.tags }}
+
+      - name: Upload Docker Scout SARIF Report
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: scout.sarif
+

@@ -1,0 +1,61 @@
+name: Helm Chart CI/CD (chart-only)
+
+on:
+  pull_request:
+    paths:
+      - "chart/**"
+  push:
+    branches: [ "main", "develop", "feat" ]
+    paths:
+      - "chart/**"
+
+permissions:
+  contents: write
+  actions: read
+
+env:
+  CHART_DIR: charts/it-works-on-my-machine
+  OUT_DIR: dist
+
+jobs:
+  helm-lint:
+    runs-on: ubuntu-latest
+    steps:
+     - name: Checkout (full history for diffs)
+       uses: actions/checkout@v4
+       with:
+          fetch-depth: 0
+
+     - name: Setup Helm
+       uses: azure/setup-helm@v4
+
+     - name: Derive version from tag
+       id: ver
+       run: |
+          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/v4.44.3/yq_linux_amd64
+          sudo chmod +x /usr/local/bin/yq
+          yq '.version' ${CHART_DIR}/Chart.yaml
+
+     - name: Helm lint
+       run: |
+        helm lint "${CHART_DIR}"
+        helm dependency update ${CHART_DIR}
+     - name: Helm package
+       run: |
+          mkdir -p ${OUT_DIR}
+          helm package ${CHART_DIR} --destination ${OUT_DIR}
+          ls -la ${OUT_DIR}
+     
+     - name: Upload artifact (tgz)
+       uses: actions/upload-artifact@v4
+       with:
+          name: helm-chart
+          path: dist/*.tgz
+
+     - name: Login to GHCR (OCI)
+       run: echo ${{ secrets.GITHUB_TOKEN }} | helm registry login ghcr.io --username ${{ github.actor }} --password-stdin
+
+     - name: Helm push to GHCR
+       run: |
+          TGZ=$(ls dist/*.tgz)
+          helm push "$TGZ" oci://ghcr.io/${{ github.repository_owner }}/charts

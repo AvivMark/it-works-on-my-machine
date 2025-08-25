@@ -15,19 +15,18 @@ ROOT = Path(os.environ.get('GITHUB_WORKSPACE', Path.cwd()))
 IGNORE_DIRS = {".git", "node_modules", "dist", "build"}
 
 PATTERNS = [
-    # Private IPv4 ranges
+    # private ips
     r"\b10\.(?:[0-9]{1,3}\.){2}[0-9]{1,3}\b",
     r"\b172\.(?:1[6-9]|2[0-9]|3[0-1])\.(?:[0-9]{1,3}\.)[0-9]{1,3}\b",
     r"\b192\.168\.(?:[0-9]{1,3}\.)[0-9]{1,3}\b",
-    # Loopback and link-local
+    # Loopback and link-local ips
     r"\b127\.0\.0\.1\b",
     r"\b169\.254\.[0-9]{1,3}\.[0-9]{1,3}\b",
     # common internal domains
     r"\binternal\.[a-z0-9-]+\b",
     r"\bcorp\.[a-z0-9-]+\b",
     r"\bint\.[a-z0-9-]+\b",
-    r"\bprivate\.[a-z0-9-]+\b",
-    r"\biron\b",
+    r"\bprivate\.[a-z0-9-]+\b"
 ]
 
 

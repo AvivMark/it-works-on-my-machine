@@ -6,12 +6,16 @@ on:
         description: 'Version to update charts to'
         required: true
         type: string
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version to update charts to'
-        required: true
+      environment:
+        description: 'Target environment (main, staging, production)'
+        required: false
         type: string
+        default: 'main'
+      update_chart:
+        description: 'Whether to update chart files and push'
+        required: false
+        type: boolean
+        default: true
 
 permissions:
   contents: write
@@ -23,6 +27,8 @@ env:
 jobs:
   update-helm-chart:
     runs-on: ubuntu-latest
+    # Only update chart files when targeting main or staging environments
+    if: inputs.update_chart == true && (inputs.environment == 'main' || inputs.environment == 'staging')
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -65,6 +71,7 @@ jobs:
   package-and-push-helm-chart:
     runs-on: ubuntu-latest
     needs: update-helm-chart
+    if: always() && (needs.update-helm-chart.result == 'success' || needs.update-helm-chart.result == 'skipped')
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -91,6 +98,9 @@ jobs:
           PROJECT_NAME=$(node -p "require('./package.json').name")
           CHART_DIR="charts/$PROJECT_NAME"
           REPO_OWNER=$(echo "$GITHUB_REPOSITORY" | cut -d'/' -f1)
+          
+          echo "📦 Packaging Helm chart for environment: ${{ inputs.environment }}"
+          echo "📋 Update chart files: ${{ inputs.update_chart }}"
           
           helm package "$CHART_DIR" --version "$VERSION" --app-version "$VERSION"
           helm push "$PROJECT_NAME-$VERSION.tgz" "oci://ghcr.io/${REPO_OWNER,,}/charts"

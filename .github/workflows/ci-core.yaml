@@ -1,9 +1,9 @@
-name: CI Core
+name: CI Main - Tests and Quality gates
 on:
   pull_request:
     branches: [ main, develop ]
   push:
-    branches: [ main, develop ]
+    branches: [ main, develop, feat/* ]
   workflow_call:
 
 permissions:
@@ -73,21 +73,13 @@ jobs:
           VALIDATE_JAVASCRIPT_ES: true
           IGNORE_GITIGNORED_FILES: true
 
-  helm-lint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-      
-      - name: Setup Helm
-        uses: azure/setup-helm@v4
-        
-      - name: Lint Helm Chart
-        run: |
-          PROJECT_NAME=$(node -p "require('./package.json').name")
-          helm lint "charts/$PROJECT_NAME"
+  security-tests:
+    needs: [tests, lint]
+    uses: ./.github/workflows/security.yaml
+    permissions:
+      contents: read
+      packages: write
+
+
+
+
