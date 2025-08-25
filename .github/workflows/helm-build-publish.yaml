@@ -57,11 +57,3 @@ jobs:
        with:
           name: helm-chart
           path: dist/*.tgz
-
-     - name: Login to GHCR (OCI)
-       run: echo ${{ secrets.GITHUB_TOKEN }} | helm registry login ghcr.io --username ${{ github.actor }} --password-stdin
-
-     - name: Helm push to GHCR
-       run: |
-          TGZ=$(ls dist/*.tgz)
-          helm push "$TGZ" oci://ghcr.io/${{ github.repository_owner }}/charts

@@ -76,8 +76,10 @@ jobs:
             echo "${IMAGE_BASE}:${{ github.ref_name }}" >> $GITHUB_OUTPUT
           fi
           echo "EOF" >> $GITHUB_OUTPUT
+          echo "image-base=${IMAGE_BASE}" >> $GITHUB_OUTPUT
 
       - name: Build and push Docker image
+        id: build
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -86,27 +88,11 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           file: ./Dockerfile
 
-      - name: Docker Scout Quickview and CVEs
-        uses: docker/scout-action@v1
+      - name: Run Trivy scan
+        uses: aquasecurity/trivy-action@master
         with:
-          command: quickview,cves
-          image: ${{ steps.tagger.outputs.tags }}
-
-      - name: Docker Scout SBOM
-        uses: docker/scout-action@v1
-        with:
-          command: sbom
-          image: ${{ steps.tagger.outputs.tags }}
-          output: sbom.json
-
-      - name: Docker Scout Recommendations
-        uses: docker/scout-action@v1
-        with:
-          command: recommendations
-          image: ${{ steps.tagger.outputs.tags }}
-
-      - name: Upload Docker Scout SARIF Report
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-          sarif_file: scout.sarif
-
+          image-ref: ${{ steps.tagger.outputs.image-base }}@${{ steps.build.outputs.digest }}
+          format: "table"
+          exit-code: 1
+          ignore-unfixed: true
+          severity: "CRITICAL,HIGH"
