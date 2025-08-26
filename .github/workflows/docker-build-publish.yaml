@@ -67,14 +67,14 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ steps.tagger.outputs.tags }}
+          tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           file: ./Dockerfile
 
       - name: Run Trivy scan
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: ${{ steps.tagger.outputs.image-base }}@${{ steps.build.outputs.digest }}
+          image-ref: ${{ steps.meta.outputs.tags }}
           format: "table"
           exit-code: 1
           ignore-unfixed: true
