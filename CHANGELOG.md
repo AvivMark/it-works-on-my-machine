@@ -103,6 +103,7 @@
 * update the workflows ([c94f65d](https://github.com/AvivMark/it-works-on-my-machine/commit/c94f65d1156c04a439503a87dfea2028a0c3d81c))
 * updated errors in release ([632e780](https://github.com/AvivMark/it-works-on-my-machine/commit/632e7801abbcb34e7f0562d000bdeae55c3b43e3))
 
+
 ## [1.0.0-rc.7](https://github.com/AvivMark/it-works-on-my-machine/compare/v1.0.0-rc.6...v1.0.0-rc.7) (2025-08-25)
 
 ### Bug Fixes

@@ -1,5 +1,8 @@
 name: Deploy & Test
 on:
+  pull_request:
+    types: [closed]
+    branches: [ main, develop ]
   workflow_call:
     inputs:
       version:
@@ -25,7 +28,6 @@ on:
 concurrency:
   group: cd-${{ github.ref }}
   cancel-in-progress: true
-
 permissions:
   contents: read
   packages: read

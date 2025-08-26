@@ -1,6 +1,7 @@
 name: CI Main
 on:
   pull_request:
+    types: [closed, opened]
     branches: [ main, develop ]
   push:
     branches: [ main, develop, feat-* ]
