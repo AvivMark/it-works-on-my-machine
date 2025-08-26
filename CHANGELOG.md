@@ -1,3 +1,17 @@
+## [1.1.0](https://github.com/AvivMark/it-works-on-my-machine/compare/v1.0.1...v1.1.0) (2025-08-26)
+
+### Features
+
+* add helm linting and dynamic ([6192643](https://github.com/AvivMark/it-works-on-my-machine/commit/6192643a4484b94fe6f596b374b1ad75cea280ca))
+* added less infomative readme ([d468489](https://github.com/AvivMark/it-works-on-my-machine/commit/d468489c224236d0a09185e5366a07a1a7d80c19))
+
+### Bug Fixes
+
+* remove unwanted data ([ab17e97](https://github.com/AvivMark/it-works-on-my-machine/commit/ab17e97f895df00d3ce9aea653c8dc237085e34e))
+* update ready path ([cec9813](https://github.com/AvivMark/it-works-on-my-machine/commit/cec981370e00b1242772d32a81aa61a9eae24c10))
+* update the workflows ([c94f65d](https://github.com/AvivMark/it-works-on-my-machine/commit/c94f65d1156c04a439503a87dfea2028a0c3d81c))
+* updated errors in release ([632e780](https://github.com/AvivMark/it-works-on-my-machine/commit/632e7801abbcb34e7f0562d000bdeae55c3b43e3))
+
 ## [1.0.1](https://github.com/AvivMark/it-works-on-my-machine/compare/v1.0.0...v1.0.1) (2025-08-26)
 
 ### Bug Fixes
