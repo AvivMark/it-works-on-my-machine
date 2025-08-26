@@ -91,8 +91,16 @@ jobs:
       contents: read
       packages: read
   
-  deploy-prod:
+
+  upgrade-to-master:
     needs: [deploy-staging]
+    uses: ./.github/workflows/merge.yaml
+    permissions:
+      contents: write
+      packages: write
+  
+  deploy-prod:
+    needs: [release-version]
     if: github.ref == 'refs/heads/main'
     uses: ./.github/workflows/deploy.yaml
     with:

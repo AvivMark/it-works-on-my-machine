@@ -1,7 +1,6 @@
 name: Merge Release Into Main
 on:
-  pull_request:
-    branches: [ develop ]
+  workflow_call:
 
 jobs:
     main-push:
