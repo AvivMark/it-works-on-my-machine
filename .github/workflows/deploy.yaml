@@ -158,6 +158,7 @@ jobs:
         with:
             version: '1.33.0'
 
+
       - name: Set Kubeconfig Context
         uses: azure/k8s-set-context@v3
         with:
