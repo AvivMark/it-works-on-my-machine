@@ -1,3 +1,11 @@
+## [1.1.2](https://github.com/AvivMark/it-works-on-my-machine/compare/v1.1.1...v1.1.2) (2025-08-26)
+
+### Bug Fixes
+
+* use tags ([c033ef6](https://github.com/AvivMark/it-works-on-my-machine/commit/c033ef626c955bd42e18840346a6b23056440dbb))
+* use the release version as needs in helm deploy ([ac8ad6f](https://github.com/AvivMark/it-works-on-my-machine/commit/ac8ad6fbcf14580bd7635dbea2052fcbe4f1efdd))
+* workflow error ([5975c9e](https://github.com/AvivMark/it-works-on-my-machine/commit/5975c9e326c77fce16f4425cdcb7155f8599a66f))
+
 ## [1.1.1](https://github.com/AvivMark/it-works-on-my-machine/compare/v1.1.0...v1.1.1) (2025-08-26)
 
 ### Bug Fixes
