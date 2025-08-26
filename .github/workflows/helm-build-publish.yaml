@@ -1,14 +1,19 @@
 name: Helm Chart CI/CD (chart-only)
 
 on:
-  pull_request:
-    paths:
-      - "chart/**"
-  push:
-    branches: [ "main", "develop", "feat" ]
-    paths:
-      - "chart/**"
+  workflow_call:
+    inputs:
+      version:
+        description: 'Version to build'
+        required: true
+        type: string
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to build'
+        required: true
+        type: string
+
 
 permissions:
   contents: write
@@ -41,6 +46,7 @@ jobs:
        run: |
         helm lint "${CHART_DIR}"
         helm dependency update ${CHART_DIR}
+
      - name: Helm package
        run: |
           mkdir -p ${OUT_DIR}
@@ -52,11 +58,3 @@ jobs:
        with:
           name: helm-chart
           path: dist/*.tgz
-
-     - name: Login to GHCR (OCI)
-       run: echo ${{ secrets.GITHUB_TOKEN }} | helm registry login ghcr.io --username ${{ github.actor }} --password-stdin
-
-     - name: Helm push to GHCR
-       run: |
-          TGZ=$(ls dist/*.tgz)
-          helm push "$TGZ" oci://ghcr.io/${{ github.repository_owner }}/charts

@@ -30,7 +30,9 @@ jobs:
           cache: 'npm'
       
       - name: Install dependencies
-        run: npm ci
+        run: |
+          npm ci
+          npm i conventional-changelog-conventionalcommits
       
       - name: Semantic Release
         id: semantic
@@ -47,45 +49,55 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  release-chart:
-    runs-on: ubuntu-latest
-    needs: release-version
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Setup Helm
-        uses: azure/setup-helm@v4
-
-      - name: Helm lint
-        run: helm lint "${CHART_DIR}"
-
-      - name: Run chart-releaser
-        uses: helm/chart-releaser-action@v1
-        env:
-          CR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          charts_dir: ${{ env.CHART_DIR }}
-
-  build-publish:
+  build-publish-docker:
     needs: release-version
     uses: ./.github/workflows/docker-build-publish.yaml
     with:
       version: ${{ needs.release-version.outputs.new_release_version }}
-      publish: ${{ needs.release-version.outputs.new_release_published }}
+    permissions:
+      contents: write
+      packages: write
+      actions: read
+  
+  build-publish-chart:
+    needs: build-publish-docker
+    if: github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/helm-build-publish.yaml
+    with:
+      version: ${{ needs.release-version.outputs.new_release_version }}
+    permissions:
+      contents: write
+      packages: write
+      actions: read
+
+  deploy-and-test-dev:
+    needs: [build-publish-docker, build-publish-chart, release-version]
+    if: needs.release-version.outputs.new_release_published == 'true' || github.ref == 'refs/heads/develop'
+    uses: ./.github/workflows/deploy.yaml
+    with:
+      version: ${{ needs.release-version.outputs.new_release_version }}
+      environment: develop
     permissions:
       contents: read
-      packages: write
-
-  deploy-and-test:
-    needs: [build-publish, release-chart, release-version]
-    if: needs.release-version.outputs.new_release_published == 'true'
+      packages: read
+  
+  deploy-staging:
+    needs: [deploy-and-test-dev]
     uses: ./.github/workflows/deploy.yaml
     with:
       version: ${{ needs.release-version.outputs.new_release_version }}
       environment: staging
+    permissions:
+      contents: read
+      packages: read
+  
+  deploy-prod:
+    needs: [deploy-staging]
+    if: github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/deploy.yaml
+    with:
+      version: ${{ needs.release-version.outputs.new_release_version }}
+      environment: production
     permissions:
       contents: read
       packages: read
