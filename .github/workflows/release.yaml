@@ -49,19 +49,20 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  build-publish-chart:
+  build-publish-docker:
     needs: release-version
-    uses: ./.github/workflows/helm-build-publish.yaml
+    uses: ./.github/workflows/docker-build-publish.yaml
     with:
       version: ${{ needs.release-version.outputs.new_release_version }}
     permissions:
       contents: write
       packages: write
       actions: read
-
-  build-publish-docker:
-    needs: release-version
-    uses: ./.github/workflows/docker-build-publish.yaml
+  
+  build-publish-chart:
+    needs: build-publish-docker
+    if: github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/helm-build-publish.yaml
     with:
       version: ${{ needs.release-version.outputs.new_release_version }}
     permissions:

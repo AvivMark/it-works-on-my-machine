@@ -56,3 +56,5 @@ The ci main workflow handles all the linting and testing of the service:
 - templating the dockerfile and check him too( missing checks)
 - permmission handling - only specific people can push to main and deploy
 - raise envs for pr - for each pr if workflow is complete to mkae sure it will push from develop to main by itself
+- adding notifications
+- adding rollout strategies
