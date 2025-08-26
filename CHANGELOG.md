@@ -1,3 +1,9 @@
+## [1.1.1](https://github.com/AvivMark/it-works-on-my-machine/compare/v1.1.0...v1.1.1) (2025-08-26)
+
+### Bug Fixes
+
+* only now can see it fine ([6032b9c](https://github.com/AvivMark/it-works-on-my-machine/commit/6032b9c387712852f3fe223f5a8d7b6af4d15ac6))
+
 ## [1.1.0](https://github.com/AvivMark/it-works-on-my-machine/compare/v1.0.1...v1.1.0) (2025-08-26)
 
 ### Features
