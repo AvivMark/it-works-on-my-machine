@@ -51,4 +51,10 @@ The ci main workflow handles all the linting and testing of the service:
 - Will added more tests and security tests on the cluster before deployment to make sure it will not expose our app
 - Will use argocd for continuous deployment rather than the github actions workflow (better replication for the gitops methodology)
 - Will add the use of network policies for better security
-- Becuase i used s3 connection, i would like to add cicd tests using pulumi
+- Becuase i used s3 connection, i would like to add cicd tests using pulumi for that s3 resource
+- will add monitoring  metrics in the project
+- templating the dockerfile and check him too( missing checks)
+- permmission handling - only specific people can push to main and deploy
+- raise envs for pr - for each pr if workflow is complete to mkae sure it will push from develop to main by itself
+- adding notifications
+- adding rollout strategies

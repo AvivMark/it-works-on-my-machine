@@ -49,16 +49,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  build-publish-chart:
-    needs: release-version
-    uses: ./.github/workflows/helm-build-publish.yaml
-    with:
-      version: ${{ needs.release-version.outputs.new_release_version }}
-    permissions:
-      contents: write
-      packages: write
-      actions: read
-
   build-publish-docker:
     needs: release-version
     uses: ./.github/workflows/docker-build-publish.yaml
@@ -68,14 +58,46 @@ jobs:
       contents: write
       packages: write
       actions: read
+  
+  build-publish-chart:
+    needs: build-publish-docker
+    if: github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/helm-build-publish.yaml
+    with:
+      version: ${{ needs.release-version.outputs.new_release_version }}
+    permissions:
+      contents: write
+      packages: write
+      actions: read
 
-  deploy-and-test:
+  deploy-and-test-dev:
     needs: [build-publish-docker, build-publish-chart, release-version]
-    if: needs.release-version.outputs.new_release_published == 'true'
+    if: needs.release-version.outputs.new_release_published == 'true' || github.ref == 'refs/heads/develop'
+    uses: ./.github/workflows/deploy.yaml
+    with:
+      version: ${{ needs.release-version.outputs.new_release_version }}
+      environment: develop
+    permissions:
+      contents: read
+      packages: read
+  
+  deploy-staging:
+    needs: [deploy-and-test-dev]
     uses: ./.github/workflows/deploy.yaml
     with:
       version: ${{ needs.release-version.outputs.new_release_version }}
       environment: staging
+    permissions:
+      contents: read
+      packages: read
+  
+  deploy-prod:
+    needs: [deploy-staging]
+    if: github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/deploy.yaml
+    with:
+      version: ${{ needs.release-version.outputs.new_release_version }}
+      environment: production
     permissions:
       contents: read
       packages: read
