@@ -60,7 +60,7 @@ jobs:
       actions: read
   
   build-publish-chart:
-    needs: build-publish-docker
+    needs: [build-publish-docker, release-version]
     if: github.ref == 'refs/heads/main'
     uses: ./.github/workflows/helm-build-publish.yaml
     with:
