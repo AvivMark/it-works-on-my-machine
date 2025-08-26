@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/AvivMark/it-works-on-my-machine/compare/v1.0.0...v1.0.1) (2025-08-26)
+
+### Bug Fixes
+
+* align pr ([#13](https://github.com/AvivMark/it-works-on-my-machine/issues/13)) ([07b0f28](https://github.com/AvivMark/it-works-on-my-machine/commit/07b0f2802f78e7da67d82de9847dac5fb80b7d3b))
+* too much steps ([91ee3c2](https://github.com/AvivMark/it-works-on-my-machine/commit/91ee3c206b0cb179a44438e6f1ddedfaef448fd2))
+
 ## 1.0.0 (2025-08-26)
 
 ### ⚠ BREAKING CHANGES
