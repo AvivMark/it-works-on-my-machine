@@ -1,3 +1,55 @@
+## [1.1.2](https://github.com/AvivMark/it-works-on-my-machine/compare/v1.1.1...v1.1.2) (2025-08-26)
+
+### Bug Fixes
+
+* use tags ([c033ef6](https://github.com/AvivMark/it-works-on-my-machine/commit/c033ef626c955bd42e18840346a6b23056440dbb))
+* use the release version as needs in helm deploy ([ac8ad6f](https://github.com/AvivMark/it-works-on-my-machine/commit/ac8ad6fbcf14580bd7635dbea2052fcbe4f1efdd))
+* workflow error ([5975c9e](https://github.com/AvivMark/it-works-on-my-machine/commit/5975c9e326c77fce16f4425cdcb7155f8599a66f))
+
+## [1.1.1](https://github.com/AvivMark/it-works-on-my-machine/compare/v1.1.0...v1.1.1) (2025-08-26)
+
+### Bug Fixes
+
+* only now can see it fine ([6032b9c](https://github.com/AvivMark/it-works-on-my-machine/commit/6032b9c387712852f3fe223f5a8d7b6af4d15ac6))
+
+## [1.1.0](https://github.com/AvivMark/it-works-on-my-machine/compare/v1.0.1...v1.1.0) (2025-08-26)
+
+### Features
+
+* add helm linting and dynamic ([6192643](https://github.com/AvivMark/it-works-on-my-machine/commit/6192643a4484b94fe6f596b374b1ad75cea280ca))
+* added less infomative readme ([d468489](https://github.com/AvivMark/it-works-on-my-machine/commit/d468489c224236d0a09185e5366a07a1a7d80c19))
+
+### Bug Fixes
+
+* remove unwanted data ([ab17e97](https://github.com/AvivMark/it-works-on-my-machine/commit/ab17e97f895df00d3ce9aea653c8dc237085e34e))
+* update ready path ([cec9813](https://github.com/AvivMark/it-works-on-my-machine/commit/cec981370e00b1242772d32a81aa61a9eae24c10))
+* update the workflows ([c94f65d](https://github.com/AvivMark/it-works-on-my-machine/commit/c94f65d1156c04a439503a87dfea2028a0c3d81c))
+* updated errors in release ([632e780](https://github.com/AvivMark/it-works-on-my-machine/commit/632e7801abbcb34e7f0562d000bdeae55c3b43e3))
+
+## [1.0.1](https://github.com/AvivMark/it-works-on-my-machine/compare/v1.0.0...v1.0.1) (2025-08-26)
+
+### Bug Fixes
+
+* align pr ([#13](https://github.com/AvivMark/it-works-on-my-machine/issues/13)) ([07b0f28](https://github.com/AvivMark/it-works-on-my-machine/commit/07b0f2802f78e7da67d82de9847dac5fb80b7d3b))
+* too much steps ([91ee3c2](https://github.com/AvivMark/it-works-on-my-machine/commit/91ee3c206b0cb179a44438e6f1ddedfaef448fd2))
+
+## 1.0.0 (2025-08-26)
+
+### ⚠ BREAKING CHANGES
+
+* update
+
+* Merge pull request [#3](https://github.com/AvivMark/it-works-on-my-machine/issues/3) from AvivMark/develop ([963af7e](https://github.com/AvivMark/it-works-on-my-machine/commit/963af7e392d4953a2bb3e67ce72a8c897e756494))
+
+### Features
+
+* more updates ([9f3ed5d](https://github.com/AvivMark/it-works-on-my-machine/commit/9f3ed5d026170b5203f8c68593dbf827ae11a9fe))
+* test ([dd7ad91](https://github.com/AvivMark/it-works-on-my-machine/commit/dd7ad914be5d95dc541f22f12967070f04ee8587))
+* updated release ([3482a22](https://github.com/AvivMark/it-works-on-my-machine/commit/3482a228e9c2f47044ae983d14c0854d49de6c1e))
+
+### Bug Fixes
+
+* remove dispatch ([adee805](https://github.com/AvivMark/it-works-on-my-machine/commit/adee8054580eb4cb622a995a2d3e0a87f7f31963))
 
 ## [1.0.0-alpha.11](https://github.com/AvivMark/it-works-on-my-machine/compare/v1.0.0-alpha.10...v1.0.0-alpha.11) (2025-08-25)
 

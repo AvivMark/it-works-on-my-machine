@@ -15,7 +15,7 @@ on:
       publish:
         description: 'Will be Published'
         required: true
-        type: boolean
+        type: string
 
 permissions:
   contents: read
@@ -74,7 +74,7 @@ jobs:
       - name: Run Trivy scan
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: ${{ steps.tagger.outputs.image-base }}@${{ steps.build.outputs.digest }}
+          image-ref: ${{ steps.meta.outputs.tags }}
           format: "table"
           exit-code: 1
           ignore-unfixed: true
